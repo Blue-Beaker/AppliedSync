@@ -7,7 +7,7 @@ import net.minecraftforge.common.config.Config.Type;
 
 @Config(modid = AppliedSync.MODID,type = Type.INSTANCE,category = "general")
 public class AppliedSyncConfig {
-    @Comment("Example")
-    @LangKey("config.appliedsync.example.name")
-    public static boolean example = true;
+    @Comment("Enable")
+    @LangKey("config.appliedsync.enable.name")
+    public static boolean enable = true;
 }
