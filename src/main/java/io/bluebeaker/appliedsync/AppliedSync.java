@@ -4,14 +4,10 @@ import appeng.api.config.SearchBoxMode;
 import appeng.api.config.Settings;
 import appeng.client.gui.implementations.GuiMEMonitorable;
 import appeng.core.AEConfig;
-import appeng.integration.Integrations;
-import io.bluebeaker.appliedsync.mixin.AccessorGuiMEMonitorable;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import org.apache.logging.log4j.Logger;
 
-import io.bluebeaker.appliedsync.Tags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigManager;
@@ -45,24 +41,6 @@ public class AppliedSync
     @EventHandler
     public void onServerStart(FMLServerStartingEvent event){
         this.server=event.getServer();
-    }
-
-    @SubscribeEvent
-    public void onInput(GuiScreenEvent.DrawScreenEvent event){
-        GuiScreen gui = event.getGui();
-        if(gui instanceof GuiMEMonitorable && shouldSync()){
-
-            AccessorGuiMEMonitorable accessor = (AccessorGuiMEMonitorable) gui;
-            String searchText = Integrations.jei().getSearchText();
-            accessor.getSearchField().setText(searchText);
-            accessor.getRepo().setSearchString(searchText);
-        }
-    }
-
-    public boolean shouldSync(){
-        if(!AppliedSyncConfig.enable) return false;
-        final Enum searchModeSetting = AEConfig.instance().getConfigManager().getSetting(Settings.SEARCH_MODE);
-        return (SearchBoxMode.JEI_AUTOSEARCH == searchModeSetting || SearchBoxMode.JEI_MANUAL_SEARCH == searchModeSetting || SearchBoxMode.JEI_AUTOSEARCH_KEEP==searchModeSetting || SearchBoxMode.JEI_MANUAL_SEARCH_KEEP==searchModeSetting);
     }
 
     @SubscribeEvent

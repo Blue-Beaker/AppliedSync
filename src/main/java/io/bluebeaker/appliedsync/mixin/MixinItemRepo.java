@@ -1,8 +1,10 @@
 package io.bluebeaker.appliedsync.mixin;
 
 import appeng.client.me.ItemRepo;
-import appeng.integration.Integrations;
 import io.bluebeaker.appliedsync.AppliedSyncConfig;
+import io.bluebeaker.appliedsync.JEIPlugin;
+import io.bluebeaker.appliedsync.Utils;
+import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,6 +19,10 @@ public abstract class MixinItemRepo {
     @Inject(method = "updateJEI(Ljava/lang/String;)V",at = @At("HEAD"),cancellable = true)
     public void syncJEI(String filter, CallbackInfo ci){
         if(!AppliedSyncConfig.enable) return;
+
+        if(Utils.isMEFocused(Minecraft.getMinecraft().currentScreen)) return;
+
+        Utils.syncJeiToME(Minecraft.getMinecraft().currentScreen,JEIPlugin.runtime);
         ci.cancel();
     }
 }
