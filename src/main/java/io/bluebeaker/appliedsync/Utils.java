@@ -17,14 +17,18 @@ public class Utils {
     public static void syncJeiToME(@Nullable GuiScreen gui, IJeiRuntime runtime) {
         if(!(gui instanceof GuiMEMonitorable) || runtime==null) return;
         if(!shouldSync()) return;
-        AccessorGuiMEMonitorable accessor = (AccessorGuiMEMonitorable) gui;
-        String text = runtime.getIngredientFilter().getFilterText();
+        try {
+            AccessorGuiMEMonitorable accessor = (AccessorGuiMEMonitorable) gui;
+            String text = runtime.getIngredientFilter().getFilterText();
 
-        ItemRepo repo = accessor.getRepo();
-        if(repo!=null) repo.setSearchString(text);
+            ItemRepo repo = accessor.getRepo();
+            if(repo!=null) repo.setSearchString(text);
 
-        MEGuiTextField searchField = accessor.getSearchField();
-        if(searchField!=null) searchField.setText(text);
+            MEGuiTextField searchField = accessor.getSearchField();
+            if(searchField!=null) searchField.setText(text);
+        }catch (Exception e){
+            AppliedSync.getLogger().error("Exception when trying to sync search texts: ",e);
+        }
     }
 
     public static boolean shouldSync(){
